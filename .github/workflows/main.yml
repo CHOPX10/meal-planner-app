@@ -31,9 +31,3 @@ jobs:
             echo "APK no encontrado"
             exit 1
           fi
-
-      - name: Subir APK como artefacto
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
