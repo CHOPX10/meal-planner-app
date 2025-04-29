@@ -12,15 +12,18 @@ jobs:
       ANDROID_SDK_ROOT: $RUNNER_TOOL_CACHE/android-sdk
 
       
-    steps:
-    - uses: actions/checkout@v3
-      name: Clonar el repositorio
+        steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
 
-    - name: Configurar Java (Temurin 17)
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: 17
+      # … tus pasos anteriores de Java, SDK, build, etc. …
+
+      - name: Subir APK como artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: MealPlanner-release-apk
+          path: app/build/outputs/apk/release/app-release.apk
+
 
     - name: Instalar Android SDK y herramientas
       run: |
