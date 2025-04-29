@@ -8,24 +8,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clonar repositorio
-      uses: actions/checkout@v3
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
 
-    - name: Configurar JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: 17
+      - name: Configurar JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
 
-    - name: Dar permisos a gradlew
-      run: chmod +x ./gradlew
+      - name: Dar permisos a gradlew
+        run: chmod +x ./gradlew
 
-    - name: Compilar APK
-      run: ./gradlew assembleRelease
+      - name: Compilar APK
+        run: ./gradlew assembleRelease
 
-    - name: Subir artefacto APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: MealPlanner-release-apk
-        path: app/build/outputs/apk/release/app-release.apk
-
+      - name: Subir artefacto APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: MealPlanner-release-apk
+          path: app/build/outputs/apk/release/app-release.apk
