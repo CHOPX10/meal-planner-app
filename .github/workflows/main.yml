@@ -1,4 +1,4 @@
-name: Compilar APK Android
+name: Build Android APK
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositorio
+      - name: Checkout del código
         uses: actions/checkout@v3
 
       - name: Configurar JDK
@@ -17,15 +17,14 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: Dar permisos a gradlew
+      - name: Permisos para Gradle
         run: chmod +x ./gradlew
 
       - name: Compilar APK
         run: ./gradlew assembleRelease
 
-      - name: Subir artefacto APK
+      - name: Subir APK como artefacto
         uses: actions/upload-artifact@v3
         with:
-          name: apk-release
+          name: app-release
           path: app/build/outputs/apk/release/app-release.apk
-
