@@ -1,34 +1,31 @@
 name: Compilar APK Android
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ANDROID_SDK_ROOT: /opt/android-sdk
 
     steps:
-      - name: Clonar el repositorio
-        uses: actions/checkout@v3
+    - name: Clonar repositorio
+      uses: actions/checkout@v3
 
-      - name: Configurar Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 17
+    - name: Configurar JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: 17
 
-      - name: Instalar Android SDK
-        run: |
-          sudo apt-get update
-          sudo apt-get install
+    - name: Dar permisos a gradlew
+      run: chmod +x ./gradlew
 
-      - name: Subir artefacto APK
-        uses: actions/upload-artifact@v3
-          with:
-          name: MealPlanner-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+    - name: Compilar APK
+      run: ./gradlew assembleRelease
+
+    - name: Subir artefacto APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: MealPlanner-release-apk
+        path: app/build/outputs/apk/release/app-release.apk
 
