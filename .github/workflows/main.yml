@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew assembleRelease
 
       - name: Subir APK como artefacto
-        uses: actions/upload-artifact@v3
-        with:
-          name: MealPlanner-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+  uses: actions/upload-artifact@v2
+  with:
+    name: MealPlanner-release-apk
+    path: app/build/outputs/apk/release/app-release.apk
