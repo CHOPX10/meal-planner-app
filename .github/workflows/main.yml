@@ -26,5 +26,5 @@ jobs:
       - name: Subir artefacto APK
         uses: actions/upload-artifact@v3
         with:
-          name: MealPlanner-release-apk
+         - name: MealPlanner-release-apk
           path: app/build/outputs/apk/release/app-release.apk
