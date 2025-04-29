@@ -9,34 +9,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_SDK_ROOT: $RUNNER_TOOL_CACHE/android-sdk
+      ANDROID_SDK_ROOT: ${{ runner.tool_cache }}/android-sdk
 
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
 
-      - name: Configurar Java (Temurin 17)
+      - name: Configurar Java
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Instalar Android SDK y herramientas
+      - name: Instalar Android SDK
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip wget
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip -O cmdline-tools.zip
-          sudo unzip cmdline-tools.zip -d $ANDROID_SDK_ROOT
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip -O tools.zip
+          unzip tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-      - name: Dar permiso de ejecución al Gradle Wrapper
+      - name: Dar permisos a gradlew
         run: chmod +x ./gradlew
 
-      - name: Compilar APK (release)
+      - name: Compilar APK
         run: ./gradlew assembleRelease
 
-      - name: Subir APK como artefacto
-        uses: actions/upload-artifact@v2
+      - name: Subir artefacto APK
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: MealPlanner-release-apk
           path: app/build/outputs/apk/release/app-release.apk
