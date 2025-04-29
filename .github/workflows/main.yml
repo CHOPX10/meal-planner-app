@@ -25,3 +25,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install
+      - name: Subir APK como artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/app-release.apk
