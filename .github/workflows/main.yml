@@ -1,34 +1,39 @@
-name: Compilar APK Android
+name: Build Android APK
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ANDROID_SDK_ROOT: /opt/android-sdk
 
     steps:
-      - name: Clonar el repositorio
+      - name: Checkout del código
         uses: actions/checkout@v3
 
-      - name: Configurar Java
+      - name: Configurar JDK
         uses: actions/setup-java@v3
         with:
-          distribution: temurin
+          distribution: 'temurin'
           java-version: 17
 
-      - name: Instalar Android SDK
-        run: |
-          sudo apt-get update
-          sudo apt-get install
+      - name: Permisos para Gradle
+        run: chmod +x ./gradlew
+
+      - name: Compilar APK
+        run: ./gradlew assembleRelease
+
       - name: Verificar si el APK existe
-        run: |if [ -f app/build/outputs/apk/release/app-release.apk ]; then
-        echo "APK encontrado"
-        else
-        echo "APK no encontrado"
-      exit 1
-     fi
+        run: |
+          if [ -f app/build/outputs/apk/release/app-release.apk ]; then
+            echo "APK encontrado"
+          else
+            echo "APK no encontrado"
+            exit 1
+          fi
+
+      - name: Subir APK como artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/app-release.apk
