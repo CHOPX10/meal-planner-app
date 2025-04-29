@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_SDK_ROOT: ${{ runner.tool_cache }}/android-sdk
+      ANDROID_SDK_ROOT: /opt/android-sdk
 
     steps:
       - name: Clonar el repositorio
@@ -24,21 +24,4 @@ jobs:
       - name: Instalar Android SDK
         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip wget
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip -O tools.zip
-          unzip tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools
-          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-
-      - name: Dar permisos a gradlew
-        run: chmod +x ./gradlew
-
-      - name: Compilar APK
-        run: ./gradlew assembleRelease
-
-      - name: Subir artefacto APK
-        uses: actions/upload-artifact@v3.1.3
-        with:
-          name: MealPlanner-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          sudo apt-get install
